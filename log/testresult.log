@@ -1,0 +1,2996 @@
+
+
+  ========= 测试开始 : 20221116_160426 =========
+
+
+
+>>> cases\web\api_automation\客户API\修改客户API.py
+
+* 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），修改客户ID为一个不存在的ID customerModify0201  -  2022-11-16 16:04:26
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+登录返回结果
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：1，参数name ：阿乐，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+修改后客户信息
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），修改客户ID为一个不存在的ID customerModify0201
+[
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），只修改客户名称，修改客户ID为一个存在的ID customerModify0202  -  2022-11-16 16:04:26
+
+[ case setup ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），只修改客户名称，修改客户ID为一个存在的ID customerModify0202
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5252
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5252,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：customer_add，参数name ："阿乐"，参数phonenumber："13345679934"，参数address ：武汉市桥西医院北路 
+
+修改后客户信息
+{
+    "ret": 0
+}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+
+-- 第 4 步 -- 查看修改后客户信息 
+
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5252,
+    "name": "阿乐",
+    "phonenumber": "13345679934"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），只修改客户名称，修改客户ID为一个存在的ID customerModify0202
+[
+    {
+        "address": "武汉市桥西医院北路",
+        "id": 5252,
+        "name": "阿乐",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路', 'id': 5252, 'name': '阿乐', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户电话 customerModify0203  -  2022-11-16 16:04:26
+
+[ case setup ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户电话 customerModify0203
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5253
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5253,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：customer_add，参数name ：武汉市桥西医院，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+修改后客户信息
+{
+    "ret": 0
+}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+
+-- 第 4 步 -- 查看修改后客户信息 
+
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5253,
+    "name": "武汉市桥西医院",
+    "phonenumber": "18193458090"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户电话 customerModify0203
+[
+    {
+        "address": "武汉市桥西医院北路",
+        "id": 5253,
+        "name": "武汉市桥西医院",
+        "phonenumber": "18193458090"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路', 'id': 5253, 'name': '武汉市桥西医院', 'phonenumber': '18193458090'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户地址 customerModify0204  -  2022-11-16 16:04:27
+
+[ case setup ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户地址 customerModify0204
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5254
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5254,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：customer_add，参数name ：武汉市桥西医院，参数phonenumber："13345679934"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+修改后客户信息
+{
+    "ret": 0
+}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+
+-- 第 4 步 -- 查看修改后客户信息 
+
+{
+    "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+    "id": 5254,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户地址 customerModify0204
+[
+    {
+        "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+        "id": 5254,
+        "name": "武汉市桥西医院",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5254, 'name': '武汉市桥西医院', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和客户电话 customerModify0205  -  2022-11-16 16:04:27
+
+[ case setup ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和客户电话 customerModify0205
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5255
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5255,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：customer_add，参数name ：阿乐，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+修改后客户信息
+{
+    "ret": 0
+}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+
+-- 第 4 步 -- 查看修改后客户信息 
+
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5255,
+    "name": "阿乐",
+    "phonenumber": "18193458090"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和客户电话 customerModify0205
+[
+    {
+        "address": "武汉市桥西医院北路",
+        "id": 5255,
+        "name": "阿乐",
+        "phonenumber": "18193458090"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路', 'id': 5255, 'name': '阿乐', 'phonenumber': '18193458090'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和地址 customerModify0206  -  2022-11-16 16:04:27
+
+[ case setup ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和地址 customerModify0206
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5256
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5256,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：customer_add，参数name ：阿乐，参数phonenumber："13345679934"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+修改后客户信息
+{
+    "ret": 0
+}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+
+-- 第 4 步 -- 查看修改后客户信息 
+
+{
+    "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+    "id": 5256,
+    "name": "阿乐",
+    "phonenumber": "13345679934"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和地址 customerModify0206
+[
+    {
+        "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+        "id": 5256,
+        "name": "阿乐",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5256, 'name': '阿乐', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户电话和地址 customerModify0207  -  2022-11-16 16:04:27
+
+[ case setup ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户电话和地址 customerModify0207
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5257
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5257,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：customer_add，参数name ：武汉市桥西医院，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+修改后客户信息
+{
+    "ret": 0
+}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+
+-- 第 4 步 -- 查看修改后客户信息 
+
+{
+    "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+    "id": 5257,
+    "name": "武汉市桥西医院",
+    "phonenumber": "18193458090"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户电话和地址 customerModify0207
+[
+    {
+        "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+        "id": 5257,
+        "name": "武汉市桥西医院",
+        "phonenumber": "18193458090"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5257, 'name': '武汉市桥西医院', 'phonenumber': '18193458090'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称，客户电话和地址 customerModify0208  -  2022-11-16 16:04:27
+
+[ case setup ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称，客户电话和地址 customerModify0208
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5258
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5258,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：customer_add，参数name ：阿乐，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+修改后客户信息
+{
+    "ret": 0
+}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+
+-- 第 4 步 -- 查看修改后客户信息 
+
+{
+    "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+    "id": 5258,
+    "name": "阿乐",
+    "phonenumber": "18193458090"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称，客户电话和地址 customerModify0208
+[
+    {
+        "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+        "id": 5258,
+        "name": "阿乐",
+        "phonenumber": "18193458090"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5258, 'name': '阿乐', 'phonenumber': '18193458090'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已经存在两个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和已经存在的客户相同 customerModify0209  -  2022-11-16 16:04:27
+
+[ case setup ] 已经存在两个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和已经存在的客户相同 customerModify0209
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5259
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5259,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：modify_customer，参数id：customer_add，参数name ：f"{customer_list_name}"，参数phonenumber："18193458090"，参数address ：f"{customer_list_address}" 
+
+修改后客户信息
+{
+    "ret": 0
+}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+
+-- 第 4 步 -- 查看修改后客户信息 
+
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5259,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已经存在两个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和已经存在的客户相同 customerModify0209
+[
+    {
+        "address": "武汉市桥西医院北路",
+        "id": 5259,
+        "name": "武汉市桥西医院",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路', 'id': 5259, 'name': '武汉市桥西医院', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+
+>>> cases\web\api_automation\客户API\列出客户API.py
+
+* 没有客户，没有药品，没有订单（请求头没有携带登录成功的session id），pagenum=1，pagesize=10，keywords=空字符串） customerList0001  -  2022-11-16 16:04:27
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 参数action：list_customer，参数：pagesize：100，参数pagenum：1，参数keywords：空字符串 
+
+
+-- 第 2 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回消息体正确 ---->  通过
+
+{
+    "msg": "未登录",
+    "redirect": "/mgr/sign.html",
+    "ret": 302
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头没有携带登录成功的session id），pagenum=1，pagesize=10，keywords=空字符串） customerList0001
+[
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords=空字符串） customerList0002  -  2022-11-16 16:04:27
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：1，参数pagenum：10，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "ret": 0,
+    "retlist": [],
+    "total": 1
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords=空字符串） customerList0002
+[
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=hello，pagesize=10，keywords=空字符串） customerList0003  -  2022-11-16 16:04:27
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：hello，参数pagenum：10，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "bad pagesize:hello",
+    "ret": 2
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=hello，pagesize=10，keywords=空字符串） customerList0003
+[
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=hello，keywords=空字符串） customerList0004  -  2022-11-16 16:04:27
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：1，参数pagenum：hello，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "bad pagenum:hello",
+    "ret": 2
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=hello，keywords=空字符串） customerList0004
+[
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum缺失，pagesize=10，keywords=空字符串） customerList0005  -  2022-11-16 16:04:27
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：缺失，参数pagenum：10，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "bad pagesize:",
+    "ret": 2
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum缺失，pagesize=10，keywords=空字符串） customerList0005
+[
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize缺失，keywords=空字符串） customerList0006  -  2022-11-16 16:04:27
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：1，参数pagenum：缺失，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "bad pagenum:",
+    "ret": 2
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize缺失，keywords=空字符串） customerList0006
+[
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords缺失） customerList0007  -  2022-11-16 16:04:27
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：1，参数pagenum：10，参数keywords：缺失 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "ret": 0,
+    "retlist": [],
+    "total": 1
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords缺失） customerList0007
+[
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords空字符串） customerList0008  -  2022-11-16 16:04:27
+
+[ case setup ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords空字符串） customerList0008
+{
+    "ret": 0
+}
+{
+    "id": 5260,
+    "ret": 0
+}
+{
+    "id": 5261,
+    "ret": 0
+}
+{
+    "id": 5262,
+    "ret": 0
+}
+{
+    "id": 5263,
+    "ret": 0
+}
+{
+    "id": 5264,
+    "ret": 0
+}
+{
+    "id": 5265,
+    "ret": 0
+}
+{
+    "id": 5266,
+    "ret": 0
+}
+{
+    "id": 5267,
+    "ret": 0
+}
+{
+    "id": 5268,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：1，参数pagenum：10，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "ret": 0,
+    "retlist": [
+        {
+            "address": "上海华山路777号",
+            "id": 4,
+            "name": "上海人民医院",
+            "phonenumber": "14456789017"
+        }
+    ],
+    "total": 10
+}
+  PASS 
+
+[ case_default teardown ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords空字符串） customerList0008
+[
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5268,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5267,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5266,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5265,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5264,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5263,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5262,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5261,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5260,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路9', 'id': 5268, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5267, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5266, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5265, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5264, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5263, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5262, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5261, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5260, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=2，pagesize=10，keywords空字符串） customerList0009  -  2022-11-16 16:04:28
+
+[ case setup ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=2，pagesize=10，keywords空字符串） customerList0009
+{
+    "id": 5269,
+    "ret": 0
+}
+{
+    "id": 5270,
+    "ret": 0
+}
+{
+    "id": 5271,
+    "ret": 0
+}
+{
+    "id": 5272,
+    "ret": 0
+}
+{
+    "id": 5273,
+    "ret": 0
+}
+{
+    "id": 5274,
+    "ret": 0
+}
+{
+    "id": 5275,
+    "ret": 0
+}
+{
+    "id": 5276,
+    "ret": 0
+}
+{
+    "id": 5277,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：2，参数pagenum：10，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "ret": 0,
+    "retlist": [],
+    "total": 10
+}
+  PASS 
+
+[ case_default teardown ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=2，pagesize=10，keywords空字符串） customerList0009
+[
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5277,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5276,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5275,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5274,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5273,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5272,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5271,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5270,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5269,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路9', 'id': 5277, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5276, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5275, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5274, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5273, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5272, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5271, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5270, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5269, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=10，keywords空字符串） customerList0010  -  2022-11-16 16:04:28
+
+[ case setup ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=10，keywords空字符串） customerList0010
+{
+    "id": 5278,
+    "ret": 0
+}
+{
+    "id": 5279,
+    "ret": 0
+}
+{
+    "id": 5280,
+    "ret": 0
+}
+{
+    "id": 5281,
+    "ret": 0
+}
+{
+    "id": 5282,
+    "ret": 0
+}
+{
+    "id": 5283,
+    "ret": 0
+}
+{
+    "id": 5284,
+    "ret": 0
+}
+{
+    "id": 5285,
+    "ret": 0
+}
+{
+    "id": 5286,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：3，参数pagenum：10，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "ret": 0,
+    "retlist": [],
+    "total": 10
+}
+  PASS 
+
+[ case_default teardown ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=10，keywords空字符串） customerList0010
+[
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5286,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5285,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5284,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5283,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5282,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5281,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5280,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5279,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5278,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路9', 'id': 5286, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5285, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5284, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5283, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5282, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5281, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5280, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5279, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5278, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=5，keywords空字符串） customerList0011  -  2022-11-16 16:04:28
+
+[ case setup ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=5，keywords空字符串） customerList0011
+{
+    "id": 5287,
+    "ret": 0
+}
+{
+    "id": 5288,
+    "ret": 0
+}
+{
+    "id": 5289,
+    "ret": 0
+}
+{
+    "id": 5290,
+    "ret": 0
+}
+{
+    "id": 5291,
+    "ret": 0
+}
+{
+    "id": 5292,
+    "ret": 0
+}
+{
+    "id": 5293,
+    "ret": 0
+}
+{
+    "id": 5294,
+    "ret": 0
+}
+{
+    "id": 5295,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：list_customer，参数：pagesize：3，参数pagenum：5，参数keywords：空字符串 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "ret": 0,
+    "retlist": [],
+    "total": 10
+}
+  PASS 
+
+[ case_default teardown ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=5，keywords空字符串） customerList0011
+[
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5295,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5294,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5293,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5292,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5291,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5290,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5289,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5288,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5287,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路9', 'id': 5295, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5294, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5293, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5292, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5291, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5290, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5289, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5288, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5287, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+
+>>> cases\web\api_automation\客户API\删除客户API.py
+
+* 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），删除客户ID为一个不存在的ID customerDel0301  -  2022-11-16 16:04:28
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：del_customer，参数id：1 
+
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+* 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），删除客户ID为一个不存在的ID customerDel0302  -  2022-11-16 16:04:28
+
+[ case setup ] 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），删除客户ID为一个不存在的ID customerDel0302
+登录返回结果
+{
+    "ret": 0
+}
+新增客户id
+5296
+新增客户信息
+{
+    "address": "武汉市桥西医院北路",
+    "id": 5296,
+    "name": "武汉市桥西医院",
+    "phonenumber": "13345679934"
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：del_customer，参数id：1 
+
+{'ret': 0}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+
+>>> cases\web\api_automation\客户API\添加客户API.py
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id），客户名、电话号码、地址 均符合接口规范 customerAdd0101  -  2022-11-16 16:04:28
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：add_customer ，参数name ：阿乐，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+{'id': 5297, 'ret': 0}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "id": 5297,
+    "ret": 0
+}
+
+-- 第 4 步 -- 查看添加后客户信息 
+
+{
+    "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+    "id": 5297,
+    "name": "阿乐",
+    "phonenumber": "18193458090"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），客户名、电话号码、地址 均符合接口规范 customerAdd0101
+[
+    {
+        "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+        "id": 5297,
+        "name": "阿乐",
+        "phonenumber": "18193458090"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5297, 'name': '阿乐', 'phonenumber': '18193458090'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名、电话号码、地址 均符合接口规范 customerAdd0102  -  2022-11-16 16:04:28
+
+[ case setup ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名、电话号码、地址 均符合接口规范 customerAdd0102
+{
+    "id": 5298,
+    "ret": 0
+}
+{
+    "id": 5299,
+    "ret": 0
+}
+{
+    "id": 5300,
+    "ret": 0
+}
+{
+    "id": 5301,
+    "ret": 0
+}
+{
+    "id": 5302,
+    "ret": 0
+}
+{
+    "id": 5303,
+    "ret": 0
+}
+{
+    "id": 5304,
+    "ret": 0
+}
+{
+    "id": 5305,
+    "ret": 0
+}
+{
+    "id": 5306,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：add_customer ，参数name ：阿乐，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+{'id': 5307, 'ret': 0}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "id": 5307,
+    "ret": 0
+}
+
+-- 第 4 步 -- 查看添加后客户信息 
+
+{
+    "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+    "id": 5307,
+    "name": "阿乐",
+    "phonenumber": "18193458090"
+}
+
+-- 第 5 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名、电话号码、地址 均符合接口规范 customerAdd0102
+[
+    {
+        "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+        "id": 5307,
+        "name": "阿乐",
+        "phonenumber": "18193458090"
+    },
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5306,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5305,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5304,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5303,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5302,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5301,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5300,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5299,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5298,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5307, 'name': '阿乐', 'phonenumber': '18193458090'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路9', 'id': 5306, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5305, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5304, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5303, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5302, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5301, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5300, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5299, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5298, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段缺失 customerAdd0103  -  2022-11-16 16:04:29
+
+[ case setup ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段缺失 customerAdd0103
+{
+    "id": 5308,
+    "ret": 0
+}
+{
+    "id": 5309,
+    "ret": 0
+}
+{
+    "id": 5310,
+    "ret": 0
+}
+{
+    "id": 5311,
+    "ret": 0
+}
+{
+    "id": 5312,
+    "ret": 0
+}
+{
+    "id": 5313,
+    "ret": 0
+}
+{
+    "id": 5314,
+    "ret": 0
+}
+{
+    "id": 5315,
+    "ret": 0
+}
+{
+    "id": 5316,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：add_customer ，参数name ：，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+{'msg': "req body format error\nKey: 'Body.Data.Name' Error:Field validation for 'Name' failed on the 'required' tag", 'ret': 2}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "req body format error\nKey: 'Body.Data.Name' Error:Field validation for 'Name' failed on the 'required' tag",
+    "ret": 2
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段缺失 customerAdd0103
+[
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5316,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5315,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5314,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5313,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5312,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5311,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5310,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5309,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5308,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路9', 'id': 5316, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5315, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5314, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5313, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5312, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5311, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5310, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5309, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5308, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段重复2次 customerAdd0104  -  2022-11-16 16:04:29
+
+[ case setup ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段重复2次 customerAdd0104
+{
+    "id": 5317,
+    "ret": 0
+}
+{
+    "id": 5318,
+    "ret": 0
+}
+{
+    "id": 5319,
+    "ret": 0
+}
+{
+    "id": 5320,
+    "ret": 0
+}
+{
+    "id": 5321,
+    "ret": 0
+}
+{
+    "id": 5322,
+    "ret": 0
+}
+{
+    "id": 5323,
+    "ret": 0
+}
+{
+    "id": 5324,
+    "ret": 0
+}
+{
+    "id": 5325,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：add_customer ，参数name ,"阿乐","阿乐"，参数phonenumber："18193458090"，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+{'id': 5326, 'ret': 0}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "id": 5326,
+    "ret": 0
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段重复2次 customerAdd0104
+[
+    {
+        "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+        "id": 5326,
+        "name": "阿乐阿乐",
+        "phonenumber": "18193458090"
+    },
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5325,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5324,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5323,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5322,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5321,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5320,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5319,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5318,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5317,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5326, 'name': '阿乐阿乐', 'phonenumber': '18193458090'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路9', 'id': 5325, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5324, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5323, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5322, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5321, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5320, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5319, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5318, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5317, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段缺失 customerAdd0105  -  2022-11-16 16:04:29
+
+[ case setup ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段缺失 customerAdd0105
+{
+    "id": 5327,
+    "ret": 0
+}
+{
+    "id": 5328,
+    "ret": 0
+}
+{
+    "id": 5329,
+    "ret": 0
+}
+{
+    "id": 5330,
+    "ret": 0
+}
+{
+    "id": 5331,
+    "ret": 0
+}
+{
+    "id": 5332,
+    "ret": 0
+}
+{
+    "id": 5333,
+    "ret": 0
+}
+{
+    "id": 5334,
+    "ret": 0
+}
+{
+    "id": 5335,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：add_customer ，参数name ,"阿乐"，参数phonenumber：""，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+{'msg': "req body format error\nKey: 'Body.Data.Phonenumber' Error:Field validation for 'Phonenumber' failed on the 'required' tag", 'ret': 2}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "req body format error\nKey: 'Body.Data.Phonenumber' Error:Field validation for 'Phonenumber' failed on the 'required' tag",
+    "ret": 2
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段缺失 customerAdd0105
+[
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5335,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5334,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5333,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5332,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5331,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5330,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5329,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5328,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5327,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '武汉市桥西医院北路9', 'id': 5335, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5334, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5333, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5332, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5331, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5330, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5329, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5328, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5327, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+* 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段重复2次 customerAdd0106  -  2022-11-16 16:04:29
+
+[ case setup ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段重复2次 customerAdd0106
+{
+    "id": 5336,
+    "ret": 0
+}
+{
+    "id": 5337,
+    "ret": 0
+}
+{
+    "id": 5338,
+    "ret": 0
+}
+{
+    "id": 5339,
+    "ret": 0
+}
+{
+    "id": 5340,
+    "ret": 0
+}
+{
+    "id": 5341,
+    "ret": 0
+}
+{
+    "id": 5342,
+    "ret": 0
+}
+{
+    "id": 5343,
+    "ret": 0
+}
+{
+    "id": 5344,
+    "ret": 0
+}
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 调用用户登录接口 
+
+{
+    "ret": 0
+}
+
+-- 第 2 步 -- 参数action：add_customer ，参数name ,"阿乐"，参数phonenumber："18193458090"，"18193458090",参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区 
+
+{'id': 5345, 'ret': 0}
+
+-- 第 3 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "id": 5345,
+    "ret": 0
+}
+  PASS 
+
+[ case_default teardown ] 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段重复2次 customerAdd0106
+[
+    {
+        "address": "甘肃省庆阳市西峰区朔州西路庆化苑二区",
+        "id": 5345,
+        "name": "阿乐",
+        "phonenumber": "1819345809018193458090"
+    },
+    {
+        "address": "武汉市桥西医院北路9",
+        "id": 5344,
+        "name": "武汉市桥西医院9",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路8",
+        "id": 5343,
+        "name": "武汉市桥西医院8",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路7",
+        "id": 5342,
+        "name": "武汉市桥西医院7",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路6",
+        "id": 5341,
+        "name": "武汉市桥西医院6",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路5",
+        "id": 5340,
+        "name": "武汉市桥西医院5",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路4",
+        "id": 5339,
+        "name": "武汉市桥西医院4",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路3",
+        "id": 5338,
+        "name": "武汉市桥西医院3",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路2",
+        "id": 5337,
+        "name": "武汉市桥西医院2",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "武汉市桥西医院北路1",
+        "id": 5336,
+        "name": "武汉市桥西医院1",
+        "phonenumber": "13345679934"
+    },
+    {
+        "address": "上海华山路777号",
+        "id": 4,
+        "name": "上海人民医院",
+        "phonenumber": "14456789017"
+    }
+]
+{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5345, 'name': '阿乐', 'phonenumber': '1819345809018193458090'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路9', 'id': 5344, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路8', 'id': 5343, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路7', 'id': 5342, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路6', 'id': 5341, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路5', 'id': 5340, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路4', 'id': 5339, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路3', 'id': 5338, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路2', 'id': 5337, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '武汉市桥西医院北路1', 'id': 5336, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}
+{
+    "ret": 0
+}
+{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}
+{
+    "msg": "delete DB record failed:\nFOREIGN KEY constraint failed",
+    "ret": 2
+}
+
+
+>>> cases\web\api_automation\登录API\登录API.py
+
+* 输入正确的用户名和密码，登录成功 APILogin001  -  2022-11-16 16:04:29
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名 byhy，输入密码 88888888 
+
+
+-- 第 2 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "ret": 0
+}
+  PASS 
+
+* 输入正确的用户名,错误密码，登录失败 APILogin002  -  2022-11-16 16:04:29
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名 byhy，输入密码 888888880 
+
+
+-- 第 2 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "用户名或者密码错误",
+    "ret": 1
+}
+  PASS 
+
+* 输入正确的用户名，密码为空，登录失败 APILogin003  -  2022-11-16 16:04:29
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名 byhy，输入密码为空 
+
+
+-- 第 2 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "用户名或者密码错误",
+    "ret": 1
+}
+  PASS 
+
+* 输入错误的用户名和密码，登录失败 APILogin004  -  2022-11-16 16:04:29
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名 byhyo，输入密码 888888880 
+
+
+-- 第 2 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "用户名或者密码错误",
+    "ret": 1
+}
+  PASS 
+
+* 输入用户名和密码为空，登录失败 APILogin005  -  2022-11-16 16:04:29
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名为空，输入密码为空 
+
+
+-- 第 2 步 -- 断言，返回的消息体数据正确 
+
+
+** 检查点 **  返回的消息体数据正确 ---->  通过
+
+{
+    "msg": "用户名或者密码错误",
+    "ret": 1
+}
+  PASS 
+
+
+>>> cases\web\ui_automation\客户UI\
+
+[ suite setup ] cases\web\ui_automation\客户UI\
+打开浏览器
+
+
+>>> cases\web\ui_automation\客户UI\客户UI.py
+
+* 添加客户后并删除  UIMgr_001  -  2022-11-16 16:04:33
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 点击左侧客户菜单 
+
+
+-- 第 2 步 -- 点击添加客户按钮 
+
+
+-- 第 3 步 -- 输入客户名 阿乐 
+
+
+-- 第 4 步 -- 输入联系电话 18193458090 
+
+
+-- 第 5 步 -- 输入地址 甘肃省庆阳市西峰区庆化苑二区6号楼1单元1002室 
+
+
+-- 第 6 步 -- 点击创建按钮 
+
+
+-- 第 7 步 -- 检查添加信息 
+
+['客户名：', '阿乐', '联系电话：', '18193458090', '地址：', '甘肃省庆阳市西峰区庆化苑二区6号楼1单元1002室']
+
+** 检查点 **  客户信息和添加内容一致  ---->  通过
+
+
+-- 第 8 步 -- 点击删除按钮 
+
+  PASS 
+
+[ suite teardown ] cases\web\ui_automation\客户UI\
+
+
+>>> cases\web\ui_automation\登录UI\登录UI.py
+
+* 输入正确的用户名和密码，登录成功 UILogin001  -  2022-11-16 16:04:39
+
+[ case_default setup ] 输入正确的用户名和密码，登录成功 UILogin001
+打开浏览器
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名 byhy 
+
+
+-- 第 2 步 -- 输入密码 88888888 
+
+
+-- 第 3 步 -- 点击登录按钮 
+
+
+-- 第 4 步 -- 获取左侧菜单信息 
+
+['客户', '药品', '订单', '其它菜单', '']
+
+-- 第 5 步 -- 断言，左侧菜单检查 
+
+
+** 检查点 **  左侧菜单检查 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 输入正确的用户名和密码，登录成功 UILogin001
+
+* 输入正确的用户名,错误密码，登录失败 UILogin002  -  2022-11-16 16:04:44
+
+[ case_default setup ] 输入正确的用户名,错误密码，登录失败 UILogin002
+打开浏览器
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名 byhy 
+
+
+-- 第 2 步 -- 输入密码 888888880 
+
+
+-- 第 3 步 -- 点击登录按钮 
+
+  ABORT   Message: no such alert
+  (Session info: chrome=107.0.5304.106)
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00A1ACD3+2075859]
+	Ordinal0 [0x009AEE61+1633889]
+	Ordinal0 [0x008AB680+571008]
+	Ordinal0 [0x008A4778+542584]
+	Ordinal0 [0x008BD968+645480]
+	Ordinal0 [0x008F7394+881556]
+	Ordinal0 [0x008BD749+644937]
+	Ordinal0 [0x008F7136+880950]
+	Ordinal0 [0x008CFEFD+720637]
+	Ordinal0 [0x008D0F3F+724799]
+	GetHandleVerifier [0x00CCEED2+2769538]
+	GetHandleVerifier [0x00CC0D95+2711877]
+	GetHandleVerifier [0x00AAA03A+521194]
+	GetHandleVerifier [0x00AA8DA0+516432]
+	Ordinal0 [0x009B682C+1665068]
+	Ordinal0 [0x009BB128+1683752]
+	Ordinal0 [0x009BB215+1683989]
+	Ordinal0 [0x009C6484+1729668]
+	BaseThreadInitThunk [0x7708FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77767BBE+286]
+	RtlGetAppContainerNamedObjectPath [0x77767B8E+238]
+ 
+Traceback:
+  File "cases\web\ui_automation\登录UI\登录UI.py", line 41, in teststeps
+    alert_content = wd.switch_to.alert.text
+  File "C:\Users\admin\AppData\Roaming\Python\Python37\site-packages\selenium\webdriver\remote\switch_to.py", line 56, in alert
+    _ = alert.text
+  File "C:\Users\admin\AppData\Roaming\Python\Python37\site-packages\selenium\webdriver\common\alert.py", line 66, in text
+    return self.driver.execute(Command.W3C_GET_ALERT_TEXT)["value"]
+  File "C:\Users\admin\AppData\Roaming\Python\Python37\site-packages\selenium\webdriver\remote\webdriver.py", line 428, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\admin\AppData\Roaming\Python\Python37\site-packages\selenium\webdriver\remote\errorhandler.py", line 243, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoAlertPresentException: Message: no such alert
+  (Session info: chrome=107.0.5304.106)
+Stacktrace:
+Backtrace:
+	Ordinal0 [0x00A1ACD3+2075859]
+	Ordinal0 [0x009AEE61+1633889]
+	Ordinal0 [0x008AB680+571008]
+	Ordinal0 [0x008A4778+542584]
+	Ordinal0 [0x008BD968+645480]
+	Ordinal0 [0x008F7394+881556]
+	Ordinal0 [0x008BD749+644937]
+	Ordinal0 [0x008F7136+880950]
+	Ordinal0 [0x008CFEFD+720637]
+	Ordinal0 [0x008D0F3F+724799]
+	GetHandleVerifier [0x00CCEED2+2769538]
+	GetHandleVerifier [0x00CC0D95+2711877]
+	GetHandleVerifier [0x00AAA03A+521194]
+	GetHandleVerifier [0x00AA8DA0+516432]
+	Ordinal0 [0x009B682C+1665068]
+	Ordinal0 [0x009BB128+1683752]
+	Ordinal0 [0x009BB215+1683989]
+	Ordinal0 [0x009C6484+1729668]
+	BaseThreadInitThunk [0x7708FA29+25]
+	RtlGetAppContainerNamedObjectPath [0x77767BBE+286]
+	RtlGetAppContainerNamedObjectPath [0x77767B8E+238]
+
+
+
+[ case_default teardown ] 输入正确的用户名,错误密码，登录失败 UILogin002
+
+* 输入正确的用户名，密码为空，登录失败 UILogin003  -  2022-11-16 16:04:48
+
+[ case_default setup ] 输入正确的用户名，密码为空，登录失败 UILogin003
+打开浏览器
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名 byhy 
+
+
+-- 第 2 步 -- 输入密码为空 
+
+
+-- 第 3 步 -- 点击登录按钮 
+
+请输入密码
+
+-- 第 5 步 -- 断言，检查菜单栏 
+
+
+** 检查点 **  弹窗提示检查 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 输入正确的用户名，密码为空，登录失败 UILogin003
+
+* 输入错误的用户名和密码，登录失败 UILogin004  -  2022-11-16 16:04:52
+
+[ case_default setup ] 输入错误的用户名和密码，登录失败 UILogin004
+打开浏览器
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名 byhyo 
+
+
+-- 第 2 步 -- 输入密码 888888880 
+
+
+-- 第 3 步 -- 点击登录按钮 
+
+登录失败 : 用户名或者密码错误
+
+-- 第 5 步 -- 断言，检查菜单栏 
+
+
+** 检查点 **  弹窗提示检查 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 输入错误的用户名和密码，登录失败 UILogin004
+
+* 输入用户名和密码为空，登录失败 UILogin005  -  2022-11-16 16:04:56
+
+[ case_default setup ] 输入用户名和密码为空，登录失败 UILogin005
+打开浏览器
+
+  [ case execution steps ]
+
+-- 第 1 步 -- 输入用户名为空 
+
+
+-- 第 2 步 -- 输入密码为空 
+
+
+-- 第 3 步 -- 点击登录按钮 
+
+请输入用户名
+
+-- 第 5 步 -- 断言，检查菜单栏 
+
+
+** 检查点 **  弹窗提示检查 ---->  通过
+
+  PASS 
+
+[ case_default teardown ] 输入用户名和密码为空，登录失败 UILogin005
+
+
+  ========= 测试结束 : 20221116_160500 =========
+
+
+  耗时    : 33.921 秒
+
+
+  预备执行用例数量 : 39
+
+  实际执行用例数量 : 39
+
+  通过 : 38
+
+  失败 : 0
+
+  异常 : 1
+
+  套件初始化失败 : 0
+
+  套件清除  失败 : 0
+
+  用例初始化失败 : 0
+
+  用例清除  失败 : 0
