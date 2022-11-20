@@ -1,0 +1,3906 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>测试报告</title>
+    <meta charset="UTF-8">
+    <style>body {    
+    font-family: consolas, Verdana, sans-serif;
+    font-size: .92em;
+    color: #696e71;
+}
+
+.main_section {   
+    width: 90%;
+    margin: 0 auto;
+}
+
+#float_menu{    
+    position:fixed;
+    top:0;
+    right:0;
+    text-align: center;
+}
+
+#float_menu .menu-item {       
+    cursor: pointer;
+    padding: .5em;
+    margin: .5em 0;
+    color: #c08580;
+    background-color: #f8f0ef;
+    font-size: 1.2em;
+}
+
+
+
+.result{  
+    display: flex;
+}
+  
+  
+.result_table{
+    border-collapse: collapse;
+    border: 1px solid #f0e0e5;
+    width: 30em;
+    text-align: center;
+    font-size: 1.0em;
+}
+      
+.result_table td{
+    border: 1px solid #f0e0e5;
+    padding: .3em;
+}
+  
+.result_barchart{  
+    width: 30em;
+    margin: 0 5em 0 5em;
+}
+  
+.barchar_item{
+    margin: 2em 0;
+}
+  
+.barchart_barbox {
+    margin: 0.5em 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #86c2dd;
+    border-radius: .2em;
+}
+  
+.barchart_bar {
+    text-align: right;
+    color: white;
+}
+  
+  
+
+
+
+.h3_button {
+    margin: 1.5em;
+    cursor: pointer;
+    color: #03a9f4;
+}
+
+
+.info
+{
+    white-space:pre-wrap;
+    padding: .6em;
+}
+
+
+.error-info
+{
+    color: #a64747
+}
+
+.suite_dir {
+    margin: 1em .2em;
+    padding: .3em;
+    /* background-color: #dfeff6; */
+    border: 1px solid #bcd8e4;
+}
+.suite_file {
+    margin: 1em .2em;
+    padding: .3em;
+    border: 1px solid #bcd8e4;
+}
+
+
+.case {
+    margin: 1em .2em;
+    /* padding: .3em; */
+    border: 1px solid #e7d4d4;
+}
+
+.case_class_path{
+    margin: 0em 1em; 
+}
+
+
+.folder_header { 
+    padding: .2em .7em;
+    background-color: #fffaf9;
+    cursor: pointer;
+}
+
+
+.setup{
+    margin: .2em;
+    /* padding: .3em; */
+    /* border: 1px solid #e7d4d4; */
+}
+.teardown{
+    margin: .2em;
+    /* padding: .3em;*/
+    /* border: 1px solid #e7d4d4; */
+}
+.test_steps{
+    margin: .2em;
+    padding: .3em;
+    /* border: 1px solid #e7d4d4; */
+}
+
+
+.label {
+    display: inline-block;
+    padding: .1em .5em;
+    font-size: .88em;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    color: #0d6ebc;
+    border-radius: .2em;
+    min-width: 5em;    
+    margin-right: 2em;
+    font-family: consolas;
+}
+
+/* .suite_setup .label{
+    color: #219e26 ;
+}
+.suite_teardown .label{
+    color: #219e26;
+} */
+
+
+/* .case.pass   .casename{
+    color: #329132 ;
+} */
+.case.pass   .caselabel{
+    color: white;
+    background-color: #3b9e3f;
+}
+/* .case.fail   .casename{
+    color: #a64747;
+} */
+.case.fail   .caselabel{
+    color: white;
+    background-color: #a64747;
+}
+/* .case.abort   .casename{
+    color: #953ab7;
+} */
+.case.abort   .caselabel{
+    color: white;
+    background-color: #9c27b0;
+}
+
+
+
+.case_step  {
+    margin: .8em;
+}
+.checkpoint_pass {
+    margin: .8em;
+}
+.checkpoint_fail {
+    margin: .8em;
+}
+
+.case_step  .tag{
+    color: #2196f3;;
+    margin: .3em 1em .3em 0;
+    padding: .1em .3em;
+    font-size: .92em;
+}
+
+.checkpoint_pass .tag{
+    color: #009806;
+    margin:.3em 1em .3em .5em;
+    padding: .1em .3em;
+    font-size: .92em;
+}
+.checkpoint_fail .tag{
+    color: #9c2020;
+    margin:.3em 1em .3em .5em;
+    padding: .1em .3em;
+    font-size: .92em;
+}
+
+.screenshot {
+    border: 1px solid #86c2dd;
+}
+
+.executetime {
+    float: right;
+}</style>
+    <script type="text/javascript">var FOLDER_ALL_CASES = false //是否为精简模式的标记
+var ERROR_INFOS = [];  // 错误信息列表
+var current_error_idx = -1;
+
+// 页面加载后执行的函数
+window.addEventListener("load", function(){
+    // 所有 .folder_header 添加点击事件处理
+    let folderHeaderEles = document.querySelectorAll(".folder_header");
+    folderHeaderEles.forEach(function(ele) {
+        ele.addEventListener("click", function(event) {
+        let fb = event.target.closest('.folder_header').nextElementSibling;
+        fb.style.display = fb.style.display === 'none' ? 'block' : 'none'
+        });
+    });
+
+    // 找到所有的错误信息对象
+    ERROR_INFOS = document.querySelectorAll(".error-info");
+});
+
+
+
+function toggle_folder_all_cases(){
+    let eles = document.querySelectorAll(".folder_body");
+    
+    FOLDER_ALL_CASES = !FOLDER_ALL_CASES;
+    document.getElementById('display_mode').innerHTML = FOLDER_ALL_CASES? "详细" : "精简"
+
+    for (const ele of eles){
+        ele.style.display =  FOLDER_ALL_CASES? "none": "block"
+    }
+    
+}
+
+
+
+function previous_error(){
+    // 查找错误必须是详细模式
+    if (FOLDER_ALL_CASES)
+        toggle_folder_all_cases()
+
+    current_error_idx -= 1; 
+    if (current_error_idx<0)
+        current_error_idx = 0
+
+    
+    let error = ERROR_INFOS[current_error_idx];
+
+    error.scrollIntoView({behavior: "smooth", block: "center", inline: "start"});
+
+    
+}
+
+
+function next_error(){
+    
+    // 查找错误必须是详细模式
+    if (FOLDER_ALL_CASES)
+        toggle_folder_all_cases()
+
+    current_error_idx += 1;
+    if (current_error_idx > ERROR_INFOS.length-1)
+        current_error_idx = ERROR_INFOS.length-1
+
+    let error = ERROR_INFOS[current_error_idx];
+
+    error.scrollIntoView({behavior: "smooth", block: "center", inline: "start"});
+    
+}</script>
+  </head>
+  <body>
+    <div class="main_section">
+      <h1 style="font-family: auto">测试报告 - hytest v0.7.5</h1>
+      <h3>统计结果</h3>
+      <div class="result">
+        <table class="result_table">
+          <tbody>
+            <tr>
+              <td>开始时间</td>
+              <td>20221120 13:52:43</td>
+            </tr>
+            <tr>
+              <td>结束时间</td>
+              <td>20221120 13:53:21</td>
+            </tr>
+            <tr>
+              <td>耗时</td>
+              <td>37.902 秒</td>
+            </tr>
+            <tr>
+              <td>预备执行用例数量</td>
+              <td>39</td>
+            </tr>
+            <tr>
+              <td>实际执用例行数量</td>
+              <td>39</td>
+            </tr>
+            <tr>
+              <td>通过</td>
+              <td>39</td>
+            </tr>
+            <tr>
+              <td>失败</td>
+              <td style="">0</td>
+            </tr>
+            <tr>
+              <td>异常</td>
+              <td style="">0</td>
+            </tr>
+            <tr>
+              <td>阻塞</td>
+              <td style="">0</td>
+            </tr>
+            <tr>
+              <td>套件初始化失败</td>
+              <td style="">0</td>
+            </tr>
+            <tr>
+              <td>套件清除失败</td>
+              <td style="">0</td>
+            </tr>
+            <tr>
+              <td>用例初始化失败</td>
+              <td style="">0</td>
+            </tr>
+            <tr>
+              <td>用例清除失败</td>
+              <td style="">0</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="result_barchart">
+          <div class="barchar_item">
+            <span>用例通过 100% ： 39 个</span>
+            <div class="barchart_barbox">
+              <div class="barchart_bar" style="width: 100.0%; background-color: #04AA6D;">100.0%</div>
+            </div>
+          </div>
+          <div class="barchar_item">
+            <span>用例失败 0% ： 0 个</span>
+            <div class="barchart_barbox">
+              <div class="barchart_bar" style="width: 0.0%; background-color: #bb4069;">0.0%</div>
+            </div>
+          </div>
+          <div class="barchar_item">
+            <span>用例异常 0% ： 0 个</span>
+            <div class="barchart_barbox">
+              <div class="barchart_bar" style="width: 0.0%; background-color: #9c27b0;">0.0%</div>
+            </div>
+          </div>
+          <div class="barchar_item">
+            <span>用例阻塞 0% ： 0 个</span>
+            <div class="barchart_barbox">
+              <div class="barchart_bar" style="width: 0.0%; background-color: #dcbdbd;">0.0%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:2em">
+        <h3 style="display:inline">执行日志</h3>
+      </div>
+      <div class="exec_log">
+        <div class="suite_file" id="suite_file cases\web\api_automation\客户API\修改客户API.py">
+          <div>
+            <span class="label">进入文件</span>
+            <span>cases\web\api_automation\客户API\修改客户API.py</span>
+          </div>
+          <div class="case pass" id="case_00000001">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单，（请求头携带登录成功的session id），修改客户ID为一个不存在的ID customerModify0201</span>
+              <span class="executetime">2022-11-20 13:52:43</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0201</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），修改客户ID为一个不存在的ID customerModify0201">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：1，参数name ：阿乐，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），修改客户ID为一个不存在的ID customerModify0201">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000002">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），只修改客户名称，修改客户ID为一个存在的ID customerModify0202</span>
+              <span class="executetime">2022-11-20 13:52:43</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0202</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），只修改客户名称，修改客户ID为一个存在的ID customerModify0202">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5442</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5442,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），只修改客户名称，修改客户ID为一个存在的ID customerModify0202">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：customer_add，参数name ：&quot;阿乐&quot;，参数phonenumber：&quot;13345679934&quot;，参数address ：武汉市桥西医院北路</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看修改后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5442,
+    &quot;name&quot;: &quot;阿乐&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），只修改客户名称，修改客户ID为一个存在的ID customerModify0202">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+        &quot;id&quot;: 5442,
+        &quot;name&quot;: &quot;阿乐&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路', 'id': 5442, 'name': '阿乐', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000003">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户电话 customerModify0203</span>
+              <span class="executetime">2022-11-20 13:52:43</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0203</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户电话 customerModify0203">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5443</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5443,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户电话 customerModify0203">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：customer_add，参数name ：武汉市桥西医院，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看修改后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5443,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;18193458090&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户电话 customerModify0203">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+        &quot;id&quot;: 5443,
+        &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+        &quot;phonenumber&quot;: &quot;18193458090&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路', 'id': 5443, 'name': '武汉市桥西医院', 'phonenumber': '18193458090'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000004">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户地址 customerModify0204</span>
+              <span class="executetime">2022-11-20 13:52:43</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0204</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户地址 customerModify0204">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5444</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5444,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户地址 customerModify0204">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：customer_add，参数name ：武汉市桥西医院，参数phonenumber：&quot;13345679934&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看修改后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+    &quot;id&quot;: 5444,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，只修改客户地址 customerModify0204">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+        &quot;id&quot;: 5444,
+        &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5444, 'name': '武汉市桥西医院', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000005">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和客户电话 customerModify0205</span>
+              <span class="executetime">2022-11-20 13:52:43</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0205</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和客户电话 customerModify0205">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5445</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5445,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和客户电话 customerModify0205">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：customer_add，参数name ：阿乐，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看修改后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5445,
+    &quot;name&quot;: &quot;阿乐&quot;,
+    &quot;phonenumber&quot;: &quot;18193458090&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和客户电话 customerModify0205">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+        &quot;id&quot;: 5445,
+        &quot;name&quot;: &quot;阿乐&quot;,
+        &quot;phonenumber&quot;: &quot;18193458090&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路', 'id': 5445, 'name': '阿乐', 'phonenumber': '18193458090'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000006">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和地址 customerModify0206</span>
+              <span class="executetime">2022-11-20 13:52:43</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0206</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和地址 customerModify0206">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5446</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5446,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和地址 customerModify0206">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：customer_add，参数name ：阿乐，参数phonenumber：&quot;13345679934&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看修改后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+    &quot;id&quot;: 5446,
+    &quot;name&quot;: &quot;阿乐&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和地址 customerModify0206">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+        &quot;id&quot;: 5446,
+        &quot;name&quot;: &quot;阿乐&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5446, 'name': '阿乐', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000007">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户电话和地址 customerModify0207</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0207</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户电话和地址 customerModify0207">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5447</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5447,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户电话和地址 customerModify0207">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：customer_add，参数name ：武汉市桥西医院，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看修改后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+    &quot;id&quot;: 5447,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;18193458090&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户电话和地址 customerModify0207">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+        &quot;id&quot;: 5447,
+        &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+        &quot;phonenumber&quot;: &quot;18193458090&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5447, 'name': '武汉市桥西医院', 'phonenumber': '18193458090'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000008">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称，客户电话和地址 customerModify0208</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0208</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称，客户电话和地址 customerModify0208">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5448</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5448,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称，客户电话和地址 customerModify0208">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：customer_add，参数name ：阿乐，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看修改后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+    &quot;id&quot;: 5448,
+    &quot;name&quot;: &quot;阿乐&quot;,
+    &quot;phonenumber&quot;: &quot;18193458090&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已经存在一个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称，客户电话和地址 customerModify0208">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+        &quot;id&quot;: 5448,
+        &quot;name&quot;: &quot;阿乐&quot;,
+        &quot;phonenumber&quot;: &quot;18193458090&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5448, 'name': '阿乐', 'phonenumber': '18193458090'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000009">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已经存在两个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和已经存在的客户相同 customerModify0209</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\修改客户API.py::customerModify0209</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已经存在两个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和已经存在的客户相同 customerModify0209">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5449</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5449,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已经存在两个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和已经存在的客户相同 customerModify0209">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：modify_customer，参数id：customer_add，参数name ：f&quot;{customer_list_name}&quot;，参数phonenumber：&quot;18193458090&quot;，参数address ：f&quot;{customer_list_address}&quot;</span>
+                </div>
+                <div class="info">修改后客户信息</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看修改后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5449,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已经存在两个客户，没有药品，没有订单，（请求头携带登录成功的session id），客户ID为一个存在的ID，修改客户名称和已经存在的客户相同 customerModify0209">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+        &quot;id&quot;: 5449,
+        &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路', 'id': 5449, 'name': '武汉市桥西医院', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suite_file" id="suite_file cases\web\api_automation\客户API\列出客户API.py">
+          <div>
+            <span class="label">进入文件</span>
+            <span>cases\web\api_automation\客户API\列出客户API.py</span>
+          </div>
+          <div class="case pass" id="case_00000010">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头没有携带登录成功的session id），pagenum=1，pagesize=10，keywords=空字符串） customerList0001</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0001</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头没有携带登录成功的session id），pagenum=1，pagesize=10，keywords=空字符串） customerList0001">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>参数action：list_customer，参数：pagesize：100，参数pagenum：1，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回消息体正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;未登录&quot;,
+    &quot;redirect&quot;: &quot;/mgr/sign.html&quot;,
+    &quot;ret&quot;: 302
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头没有携带登录成功的session id），pagenum=1，pagesize=10，keywords=空字符串） customerList0001">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000011">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords=空字符串） customerList0002</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0002</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords=空字符串） customerList0002">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：1，参数pagenum：10，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0,
+    &quot;retlist&quot;: [],
+    &quot;total&quot;: 1
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords=空字符串） customerList0002">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000012">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=hello，pagesize=10，keywords=空字符串） customerList0003</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0003</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=hello，pagesize=10，keywords=空字符串） customerList0003">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：hello，参数pagenum：10，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;bad pagesize:hello&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=hello，pagesize=10，keywords=空字符串） customerList0003">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000013">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=hello，keywords=空字符串） customerList0004</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0004</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=hello，keywords=空字符串） customerList0004">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：1，参数pagenum：hello，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;bad pagenum:hello&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=hello，keywords=空字符串） customerList0004">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000014">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum缺失，pagesize=10，keywords=空字符串） customerList0005</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0005</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum缺失，pagesize=10，keywords=空字符串） customerList0005">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：缺失，参数pagenum：10，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;bad pagesize:&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum缺失，pagesize=10，keywords=空字符串） customerList0005">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000015">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize缺失，keywords=空字符串） customerList0006</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0006</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize缺失，keywords=空字符串） customerList0006">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：1，参数pagenum：缺失，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;bad pagenum:&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize缺失，keywords=空字符串） customerList0006">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000016">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords缺失） customerList0007</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0007</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords缺失） customerList0007">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：1，参数pagenum：10，参数keywords：缺失</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0,
+    &quot;retlist&quot;: [],
+    &quot;total&quot;: 1
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords缺失） customerList0007">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000017">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords空字符串） customerList0008</span>
+              <span class="executetime">2022-11-20 13:52:44</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0008</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords空字符串） customerList0008">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5450,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5451,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5452,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5453,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5454,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5455,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5456,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5457,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5458,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords空字符串） customerList0008">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：1，参数pagenum：10，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0,
+    &quot;retlist&quot;: [
+        {
+            &quot;address&quot;: &quot;上海华山路777号&quot;,
+            &quot;id&quot;: 4,
+            &quot;name&quot;: &quot;上海人民医院&quot;,
+            &quot;phonenumber&quot;: &quot;14456789017&quot;
+        }
+    ],
+    &quot;total&quot;: 10
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=1，pagesize=10，keywords空字符串） customerList0008">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5458,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5457,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5456,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5455,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5454,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5453,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5452,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5451,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5450,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5458, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5457, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5456, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5455, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5454, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5453, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5452, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5451, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5450, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000018">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=2，pagesize=10，keywords空字符串） customerList0009</span>
+              <span class="executetime">2022-11-20 13:52:45</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0009</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=2，pagesize=10，keywords空字符串） customerList0009">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;id&quot;: 5459,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5460,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5461,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5462,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5463,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5464,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5465,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5466,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5467,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=2，pagesize=10，keywords空字符串） customerList0009">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：2，参数pagenum：10，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0,
+    &quot;retlist&quot;: [],
+    &quot;total&quot;: 10
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=2，pagesize=10，keywords空字符串） customerList0009">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5467,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5466,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5465,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5464,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5463,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5462,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5461,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5460,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5459,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5467, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5466, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5465, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5464, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5463, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5462, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5461, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5460, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5459, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000019">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=10，keywords空字符串） customerList0010</span>
+              <span class="executetime">2022-11-20 13:52:45</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0010</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=10，keywords空字符串） customerList0010">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;id&quot;: 5468,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5469,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5470,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5471,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5472,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5473,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5474,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5475,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5476,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=10，keywords空字符串） customerList0010">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：3，参数pagenum：10，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0,
+    &quot;retlist&quot;: [],
+    &quot;total&quot;: 10
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=10，keywords空字符串） customerList0010">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5476,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5475,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5474,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5473,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5472,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5471,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5470,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5469,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5468,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5476, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5475, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5474, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5473, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5472, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5471, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5470, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5469, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5468, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000020">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=5，keywords空字符串） customerList0011</span>
+              <span class="executetime">2022-11-20 13:52:45</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\列出客户API.py::customerList0011</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=5，keywords空字符串） customerList0011">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;id&quot;: 5477,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5478,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5479,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5480,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5481,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5482,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5483,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5484,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5485,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=5，keywords空字符串） customerList0011">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：list_customer，参数：pagesize：3，参数pagenum：5，参数keywords：空字符串</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0,
+    &quot;retlist&quot;: [],
+    &quot;total&quot;: 10
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id，pagenum=3，pagesize=5，keywords空字符串） customerList0011">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5485,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5484,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5483,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5482,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5481,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5480,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5479,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5478,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5477,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5485, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5484, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5483, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5482, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5481, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5480, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5479, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5478, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5477, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suite_file" id="suite_file cases\web\api_automation\客户API\删除客户API.py">
+          <div>
+            <span class="label">进入文件</span>
+            <span>cases\web\api_automation\客户API\删除客户API.py</span>
+          </div>
+          <div class="case pass" id="case_00000021">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单，（请求头携带登录成功的session id），删除客户ID为一个不存在的ID customerDel0301</span>
+              <span class="executetime">2022-11-20 13:52:45</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\删除客户API.py::customerDel0301</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），删除客户ID为一个不存在的ID customerDel0301">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：del_customer，参数id：1</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000022">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单，（请求头携带登录成功的session id），删除客户ID为一个不存在的ID customerDel0302</span>
+              <span class="executetime">2022-11-20 13:52:45</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\删除客户API.py::customerDel0302</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），删除客户ID为一个不存在的ID customerDel0302">
+                <span class="label">用例初始化</span>
+                <div class="info">登录返回结果</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">新增客户id</div>
+                <div class="info">5486</div>
+                <div class="info">新增客户信息</div>
+                <div class="info">{
+    &quot;address&quot;: &quot;武汉市桥西医院北路&quot;,
+    &quot;id&quot;: 5486,
+    &quot;name&quot;: &quot;武汉市桥西医院&quot;,
+    &quot;phonenumber&quot;: &quot;13345679934&quot;
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单，（请求头携带登录成功的session id），删除客户ID为一个不存在的ID customerDel0302">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：del_customer，参数id：1</span>
+                </div>
+                <div class="info">{'ret': 0}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suite_file" id="suite_file cases\web\api_automation\客户API\添加客户API.py">
+          <div>
+            <span class="label">进入文件</span>
+            <span>cases\web\api_automation\客户API\添加客户API.py</span>
+          </div>
+          <div class="case pass" id="case_00000023">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id），客户名、电话号码、地址 均符合接口规范 customerAdd0101</span>
+              <span class="executetime">2022-11-20 13:52:46</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\添加客户API.py::customerAdd0101</span>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id），客户名、电话号码、地址 均符合接口规范 customerAdd0101">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：add_customer ，参数name ：阿乐，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">{'id': 5487, 'ret': 0}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;id&quot;: 5487,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看添加后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+    &quot;id&quot;: 5487,
+    &quot;name&quot;: &quot;阿乐&quot;,
+    &quot;phonenumber&quot;: &quot;18193458090&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id），客户名、电话号码、地址 均符合接口规范 customerAdd0101">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+        &quot;id&quot;: 5487,
+        &quot;name&quot;: &quot;阿乐&quot;,
+        &quot;phonenumber&quot;: &quot;18193458090&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5487, 'name': '阿乐', 'phonenumber': '18193458090'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000024">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">已有10个客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名、电话号码、地址 均符合接口规范 customerAdd0102</span>
+              <span class="executetime">2022-11-20 13:52:46</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\添加客户API.py::customerAdd0102</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名、电话号码、地址 均符合接口规范 customerAdd0102">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;id&quot;: 5488,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5489,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5490,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5491,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5492,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5493,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5494,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5495,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5496,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名、电话号码、地址 均符合接口规范 customerAdd0102">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：add_customer ，参数name ：阿乐，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">{'id': 5497, 'ret': 0}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;id&quot;: 5497,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>查看添加后客户信息</span>
+                </div>
+                <div class="info">{
+    &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+    &quot;id&quot;: 5497,
+    &quot;name&quot;: &quot;阿乐&quot;,
+    &quot;phonenumber&quot;: &quot;18193458090&quot;
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 已有10个客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名、电话号码、地址 均符合接口规范 customerAdd0102">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+        &quot;id&quot;: 5497,
+        &quot;name&quot;: &quot;阿乐&quot;,
+        &quot;phonenumber&quot;: &quot;18193458090&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5496,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5495,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5494,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5493,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5492,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5491,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5490,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5489,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5488,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5497, 'name': '阿乐', 'phonenumber': '18193458090'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5496, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5495, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5494, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5493, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5492, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5491, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5490, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5489, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5488, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000025">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段缺失 customerAdd0103</span>
+              <span class="executetime">2022-11-20 13:52:46</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\添加客户API.py::customerAdd0103</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段缺失 customerAdd0103">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;id&quot;: 5498,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5499,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5500,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5501,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5502,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5503,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5504,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5505,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5506,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段缺失 customerAdd0103">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：add_customer ，参数name ：，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">{'msg': &quot;req body format error\nKey: 'Body.Data.Name' Error:Field validation for 'Name' failed on the 'required' tag&quot;, 'ret': 2}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;req body format error\nKey: 'Body.Data.Name' Error:Field validation for 'Name' failed on the 'required' tag&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段缺失 customerAdd0103">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5506,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5505,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5504,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5503,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5502,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5501,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5500,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5499,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5498,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5506, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5505, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5504, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5503, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5502, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5501, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5500, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5499, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5498, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000026">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段重复2次 customerAdd0104</span>
+              <span class="executetime">2022-11-20 13:52:46</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\添加客户API.py::customerAdd0104</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段重复2次 customerAdd0104">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;id&quot;: 5507,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5508,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5509,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5510,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5511,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5512,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5513,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5514,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5515,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段重复2次 customerAdd0104">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：add_customer ，参数name ,&quot;阿乐&quot;,&quot;阿乐&quot;，参数phonenumber：&quot;18193458090&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">{'id': 5516, 'ret': 0}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;id&quot;: 5516,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，客户名字字段重复2次 customerAdd0104">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+        &quot;id&quot;: 5516,
+        &quot;name&quot;: &quot;阿乐阿乐&quot;,
+        &quot;phonenumber&quot;: &quot;18193458090&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5515,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5514,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5513,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5512,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5511,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5510,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5509,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5508,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5507,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5516, 'name': '阿乐阿乐', 'phonenumber': '18193458090'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5515, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5514, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5513, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5512, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5511, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5510, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5509, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5508, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5507, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000027">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段缺失 customerAdd0105</span>
+              <span class="executetime">2022-11-20 13:52:47</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\添加客户API.py::customerAdd0105</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段缺失 customerAdd0105">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;id&quot;: 5517,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5518,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5519,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5520,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5521,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5522,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5523,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5524,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5525,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段缺失 customerAdd0105">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：add_customer ，参数name ,&quot;阿乐&quot;，参数phonenumber：&quot;&quot;，参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">{'msg': &quot;req body format error\nKey: 'Body.Data.Phonenumber' Error:Field validation for 'Phonenumber' failed on the 'required' tag&quot;, 'ret': 2}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;req body format error\nKey: 'Body.Data.Phonenumber' Error:Field validation for 'Phonenumber' failed on the 'required' tag&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段缺失 customerAdd0105">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5525,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5524,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5523,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5522,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5521,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5520,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5519,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5518,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5517,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5525, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5524, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5523, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5522, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5521, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5520, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5519, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5518, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5517, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000028">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段重复2次 customerAdd0106</span>
+              <span class="executetime">2022-11-20 13:52:47</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\客户API\添加客户API.py::customerAdd0106</span>
+              <div class="case_setup setup case_st_lable" id="case_setup setup 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段重复2次 customerAdd0106">
+                <span class="label">用例初始化</span>
+                <div class="info">{
+    &quot;id&quot;: 5526,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5527,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5528,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5529,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5530,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5531,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5532,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5533,
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{
+    &quot;id&quot;: 5534,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="test_steps" id="test_steps 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段重复2次 customerAdd0106">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>调用用户登录接口</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>参数action：add_customer ，参数name ,&quot;阿乐&quot;，参数phonenumber：&quot;18193458090&quot;，&quot;18193458090&quot;,参数address ：甘肃省庆阳市西峰区朔州西路庆化苑二区</span>
+                </div>
+                <div class="info">{'id': 5535, 'ret': 0}</div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;id&quot;: 5535,
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 没有客户，没有药品，没有订单（请求头携带登录成功的session id），添加一个客户，电话号码字段重复2次 customerAdd0106">
+                <span class="label">用例清除</span>
+                <div class="info">[
+    {
+        &quot;address&quot;: &quot;甘肃省庆阳市西峰区朔州西路庆化苑二区&quot;,
+        &quot;id&quot;: 5535,
+        &quot;name&quot;: &quot;阿乐&quot;,
+        &quot;phonenumber&quot;: &quot;1819345809018193458090&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路9&quot;,
+        &quot;id&quot;: 5534,
+        &quot;name&quot;: &quot;武汉市桥西医院9&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路8&quot;,
+        &quot;id&quot;: 5533,
+        &quot;name&quot;: &quot;武汉市桥西医院8&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路7&quot;,
+        &quot;id&quot;: 5532,
+        &quot;name&quot;: &quot;武汉市桥西医院7&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路6&quot;,
+        &quot;id&quot;: 5531,
+        &quot;name&quot;: &quot;武汉市桥西医院6&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路5&quot;,
+        &quot;id&quot;: 5530,
+        &quot;name&quot;: &quot;武汉市桥西医院5&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路4&quot;,
+        &quot;id&quot;: 5529,
+        &quot;name&quot;: &quot;武汉市桥西医院4&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路3&quot;,
+        &quot;id&quot;: 5528,
+        &quot;name&quot;: &quot;武汉市桥西医院3&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路2&quot;,
+        &quot;id&quot;: 5527,
+        &quot;name&quot;: &quot;武汉市桥西医院2&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;武汉市桥西医院北路1&quot;,
+        &quot;id&quot;: 5526,
+        &quot;name&quot;: &quot;武汉市桥西医院1&quot;,
+        &quot;phonenumber&quot;: &quot;13345679934&quot;
+    },
+    {
+        &quot;address&quot;: &quot;上海华山路777号&quot;,
+        &quot;id&quot;: 4,
+        &quot;name&quot;: &quot;上海人民医院&quot;,
+        &quot;phonenumber&quot;: &quot;14456789017&quot;
+    }
+]</div>
+                <div class="info">{'address': '甘肃省庆阳市西峰区朔州西路庆化苑二区', 'id': 5535, 'name': '阿乐', 'phonenumber': '1819345809018193458090'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路9', 'id': 5534, 'name': '武汉市桥西医院9', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路8', 'id': 5533, 'name': '武汉市桥西医院8', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路7', 'id': 5532, 'name': '武汉市桥西医院7', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路6', 'id': 5531, 'name': '武汉市桥西医院6', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路5', 'id': 5530, 'name': '武汉市桥西医院5', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路4', 'id': 5529, 'name': '武汉市桥西医院4', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路3', 'id': 5528, 'name': '武汉市桥西医院3', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路2', 'id': 5527, 'name': '武汉市桥西医院2', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '武汉市桥西医院北路1', 'id': 5526, 'name': '武汉市桥西医院1', 'phonenumber': '13345679934'}</div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+                <div class="info">{'address': '上海华山路777号', 'id': 4, 'name': '上海人民医院', 'phonenumber': '14456789017'}</div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;delete DB record failed:\nFOREIGN KEY constraint failed&quot;,
+    &quot;ret&quot;: 2
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suite_file" id="suite_file cases\web\api_automation\登录API\登录API.py">
+          <div>
+            <span class="label">进入文件</span>
+            <span>cases\web\api_automation\登录API\登录API.py</span>
+          </div>
+          <div class="case pass" id="case_00000029">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入正确的用户名和密码，登录成功 APILogin001</span>
+              <span class="executetime">2022-11-20 13:52:47</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\登录API\登录API.py::APILogin001</span>
+              <div class="test_steps" id="test_steps 输入正确的用户名和密码，登录成功 APILogin001">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名 byhy，输入密码 88888888</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;ret&quot;: 0
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000030">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入正确的用户名,错误密码，登录失败 APILogin002</span>
+              <span class="executetime">2022-11-20 13:52:47</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\登录API\登录API.py::APILogin002</span>
+              <div class="test_steps" id="test_steps 输入正确的用户名,错误密码，登录失败 APILogin002">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名 byhy，输入密码 888888880</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;用户名或者密码错误&quot;,
+    &quot;ret&quot;: 1
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000031">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入正确的用户名，密码为空，登录失败 APILogin003</span>
+              <span class="executetime">2022-11-20 13:52:47</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\登录API\登录API.py::APILogin003</span>
+              <div class="test_steps" id="test_steps 输入正确的用户名，密码为空，登录失败 APILogin003">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名 byhy，输入密码为空</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;用户名或者密码错误&quot;,
+    &quot;ret&quot;: 1
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000032">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入错误的用户名和密码，登录失败 APILogin004</span>
+              <span class="executetime">2022-11-20 13:52:47</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\登录API\登录API.py::APILogin004</span>
+              <div class="test_steps" id="test_steps 输入错误的用户名和密码，登录失败 APILogin004">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名 byhyo，输入密码 888888880</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;用户名或者密码错误&quot;,
+    &quot;ret&quot;: 1
+}</div>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000033">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入用户名和密码为空，登录失败 APILogin005</span>
+              <span class="executetime">2022-11-20 13:52:47</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\api_automation\登录API\登录API.py::APILogin005</span>
+              <div class="test_steps" id="test_steps 输入用户名和密码为空，登录失败 APILogin005">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名为空，输入密码为空</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>断言，返回的消息体数据正确</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>返回的消息体数据正确</span>
+                </div>
+                <div class="info">{
+    &quot;msg&quot;: &quot;用户名或者密码错误&quot;,
+    &quot;ret&quot;: 1
+}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="suite_dir" id="suite_dir cases\web\ui_automation\客户UI\">
+          <div>
+            <span class="label">进入目录</span>
+            <span>cases\web\ui_automation\客户UI\</span>
+          </div>
+          <div class="suite_setup setup" id="suite_setup setup cases\web\ui_automation\客户UI\">
+            <div class="folder_header">
+              <span class="label">套件初始化</span>
+              <span>cases\web\ui_automation\客户UI\</span>
+              <span class="executetime">2022-11-20 13:52:47</span>
+            </div>
+            <div class="folder_body">
+              <div class="info">打开浏览器</div>
+            </div>
+          </div>
+        </div>
+        <div class="suite_file" id="suite_file cases\web\ui_automation\客户UI\客户UI.py">
+          <div>
+            <span class="label">进入文件</span>
+            <span>cases\web\ui_automation\客户UI\客户UI.py</span>
+          </div>
+          <div class="case pass" id="case_00000034">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">添加客户后并删除  UIMgr_001</span>
+              <span class="executetime">2022-11-20 13:52:50</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\ui_automation\客户UI\客户UI.py::UIMgr_001</span>
+              <div class="test_steps" id="test_steps 添加客户后并删除  UIMgr_001">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>点击左侧客户菜单</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>点击添加客户按钮</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>输入客户名 阿乐</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>输入联系电话 18193458090</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>输入地址 甘肃省庆阳市西峰区庆化苑二区6号楼1单元1002室</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 6 步</span>
+                  <span>点击创建按钮</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 7 步</span>
+                  <span>检查添加信息</span>
+                </div>
+                <div class="info">['客户名：', '阿乐', '联系电话：', '18193458090', '地址：', '甘肃省庆阳市西峰区庆化苑二区6号楼1单元1002室']</div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>客户信息和添加内容一致 </span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 8 步</span>
+                  <span>点击删除按钮</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="suite_teardown teardown" id="suite_teardown teardown cases\web\ui_automation\客户UI\">
+            <div class="folder_header">
+              <span class="label">套件清除</span>
+              <span>cases\web\ui_automation\客户UI\</span>
+              <span class="executetime">2022-11-20 13:52:54</span>
+            </div>
+            <div class="folder_body"></div>
+          </div>
+        </div>
+        <div class="suite_file" id="suite_file cases\web\ui_automation\登录UI\登录UI.py">
+          <div>
+            <span class="label">进入文件</span>
+            <span>cases\web\ui_automation\登录UI\登录UI.py</span>
+          </div>
+          <div class="case pass" id="case_00000035">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入正确的用户名和密码，登录成功 UILogin001</span>
+              <span class="executetime">2022-11-20 13:52:57</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\ui_automation\登录UI\登录UI.py::UILogin001</span>
+              <div class="case_default_setup setup case_st_lable" id="case_default_setup setup 输入正确的用户名和密码，登录成功 UILogin001">
+                <span class="label">用例初始化</span>
+                <div class="info">打开浏览器</div>
+              </div>
+              <div class="test_steps" id="test_steps 输入正确的用户名和密码，登录成功 UILogin001">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名 byhy</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>输入密码 88888888</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>点击登录按钮</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 4 步</span>
+                  <span>获取左侧菜单信息</span>
+                </div>
+                <div class="info">['客户', '药品', '订单', '其它菜单', '']</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，左侧菜单检查</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>左侧菜单检查</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 输入正确的用户名和密码，登录成功 UILogin001">
+                <span class="label">用例清除</span>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000036">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入正确的用户名,错误密码，登录失败 UILogin002</span>
+              <span class="executetime">2022-11-20 13:53:03</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\ui_automation\登录UI\登录UI.py::UILogin002</span>
+              <div class="case_default_setup setup case_st_lable" id="case_default_setup setup 输入正确的用户名,错误密码，登录失败 UILogin002">
+                <span class="label">用例初始化</span>
+                <div class="info">打开浏览器</div>
+              </div>
+              <div class="test_steps" id="test_steps 输入正确的用户名,错误密码，登录失败 UILogin002">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名 byhy</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>输入密码 888888880</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>点击登录按钮</span>
+                </div>
+                <div class="info">登录失败 : 用户名或者密码错误</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，检查菜单栏</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>弹窗提示检查</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 输入正确的用户名,错误密码，登录失败 UILogin002">
+                <span class="label">用例清除</span>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000037">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入正确的用户名，密码为空，登录失败 UILogin003</span>
+              <span class="executetime">2022-11-20 13:53:08</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\ui_automation\登录UI\登录UI.py::UILogin003</span>
+              <div class="case_default_setup setup case_st_lable" id="case_default_setup setup 输入正确的用户名，密码为空，登录失败 UILogin003">
+                <span class="label">用例初始化</span>
+                <div class="info">打开浏览器</div>
+              </div>
+              <div class="test_steps" id="test_steps 输入正确的用户名，密码为空，登录失败 UILogin003">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名 byhy</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>输入密码为空</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>点击登录按钮</span>
+                </div>
+                <div class="info">请输入密码</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，检查菜单栏</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>弹窗提示检查</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 输入正确的用户名，密码为空，登录失败 UILogin003">
+                <span class="label">用例清除</span>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000038">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入错误的用户名和密码，登录失败 UILogin004</span>
+              <span class="executetime">2022-11-20 13:53:12</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\ui_automation\登录UI\登录UI.py::UILogin004</span>
+              <div class="case_default_setup setup case_st_lable" id="case_default_setup setup 输入错误的用户名和密码，登录失败 UILogin004">
+                <span class="label">用例初始化</span>
+                <div class="info">打开浏览器</div>
+              </div>
+              <div class="test_steps" id="test_steps 输入错误的用户名和密码，登录失败 UILogin004">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名 byhyo</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>输入密码 888888880</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>点击登录按钮</span>
+                </div>
+                <div class="info">登录失败 : 用户名或者密码错误</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，检查菜单栏</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>弹窗提示检查</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 输入错误的用户名和密码，登录失败 UILogin004">
+                <span class="label">用例清除</span>
+              </div>
+            </div>
+          </div>
+          <div class="case pass" id="case_00000039">
+            <div class="folder_header">
+              <span class="label caselabel">用例 PASS</span>
+              <span class="casename">输入用户名和密码为空，登录失败 UILogin005</span>
+              <span class="executetime">2022-11-20 13:53:17</span>
+            </div>
+            <div class="folder_body">
+              <span class="case_class_path">cases\web\ui_automation\登录UI\登录UI.py::UILogin005</span>
+              <div class="case_default_setup setup case_st_lable" id="case_default_setup setup 输入用户名和密码为空，登录失败 UILogin005">
+                <span class="label">用例初始化</span>
+                <div class="info">打开浏览器</div>
+              </div>
+              <div class="test_steps" id="test_steps 输入用户名和密码为空，登录失败 UILogin005">
+                <span class="label">测试步骤</span>
+                <div class="case_step">
+                  <span class="tag">第 1 步</span>
+                  <span>输入用户名为空</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 2 步</span>
+                  <span>输入密码为空</span>
+                </div>
+                <div class="case_step">
+                  <span class="tag">第 3 步</span>
+                  <span>点击登录按钮</span>
+                </div>
+                <div class="info">请输入用户名</div>
+                <div class="case_step">
+                  <span class="tag">第 5 步</span>
+                  <span>断言，检查菜单栏</span>
+                </div>
+                <div class="checkpoint_pass">
+                  <span class="tag">检查点 PASS</span>
+                  <span>弹窗提示检查</span>
+                </div>
+              </div>
+              <div class="case_default_teardown teardown case_st_lable" id="case_default_teardown teardown 输入用户名和密码为空，登录失败 UILogin005">
+                <span class="label">用例清除</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="float_menu">
+        <div class="menu-item" onclick="document.querySelector(&quot;body&quot;).scrollIntoView()">页首</div>
+        <div class="menu-item" onclick="window.open(&quot;http://www.byhy.net/tut/auto/hytest/01&quot;, &quot;_blank&quot;); ">教程</div>
+        <div class="menu-item" id="display_mode" onclick="toggle_folder_all_cases()">精简</div>
+        <div class="error_jumper" display="none">
+          <div class="menu-item" onclick="previous_error()" title="上一个错误">∧</div>
+          <div class="menu-item" onclick="next_error()" title="下一个错误">∨</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
